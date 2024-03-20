@@ -1,9 +1,12 @@
+import 'package:client_mob/main.dart';
 import 'package:client_mob/models/user_model.dart';
 import 'package:client_mob/services/auth_service.dart';
 import 'package:client_mob/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends ConsumerWidget {
   RegisterPage({super.key});
 
   final TextEditingController emailController = TextEditingController();
@@ -12,7 +15,7 @@ class RegisterPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -21,7 +24,10 @@ class RegisterPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                const Text('Register', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                const Text(
+                  'Register',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -53,43 +59,45 @@ class RegisterPage extends StatelessWidget {
                   height: 20,
                 ),
                 Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Register', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .primaryColor
-                                .withAlpha(200), // Background color
-                            shape: BoxShape
-                                .circle, // Shape of the container (optional)
-                          ),
-                          child: IconButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                print(usernameController.text);
-                                UserModel user = await AuthService.registerUser(
-                                    email: emailController.text,
-                                    username: usernameController.text,
-                                    password: passwordController.text,
-                                    context: context);
-                                  print('user is ');
-                                  print(user);
-                                // ref.read(userProvider.notifier).updateUser(
-                                //     user.id, user.username, user.email);
-                                
-                                // ref.read(pageProvider.notifier).state = 0;
-                              }
-                            },
-                            color: Colors.white,
-                            iconSize: 36,
-                            icon: const Icon(Icons.arrow_right_alt_rounded),
-                          ),
-                        ),
-                      ],
-                    )
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Register',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .primaryColor
+                            .withAlpha(200), // Background color
+                        shape: BoxShape
+                            .circle, // Shape of the container (optional)
+                      ),
+                      child: IconButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            UserModel user = await AuthService.registerUser(
+                                email: emailController.text,
+                                username: usernameController.text,
+                                password: passwordController.text,
+                                context: context);
+                            ref
+                                .read(userProvider.notifier)
+                                .updateUser(user.id, user.username, user.email);
+                            
+                            ref.read(pageProvider.notifier).state = 0;
+                          }
+                        },
+                        color: Colors.white,
+                        iconSize: 36,
+                        icon: const Icon(Icons.arrow_right_alt_rounded),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

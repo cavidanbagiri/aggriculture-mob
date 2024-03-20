@@ -1,8 +1,12 @@
+import 'package:client_mob/models/user_model.dart';
+import 'package:client_mob/providers/user_notifier.dart';
 import 'package:client_mob/widgets/custom_buttom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final pageProvider = StateProvider<int>((ref) => 0);
+
+final userProvider = StateNotifierProvider<UserNotifier, UserModel>((ref) => UserNotifier());
 
 void main() {
   runApp(const ProviderScope (child: MyApp()));

@@ -1,16 +1,34 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'dart:async';
 
-class HomePage extends StatelessWidget {
+import 'package:client_mob/main.dart';
+import 'package:client_mob/screens/home/widgets/add_new_product_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
+
+    Future<String> getUsername() async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      print('--');
+      print(prefs.getString('x-auth-token'));
+      return prefs.getString('x-auth-token') ?? 'unknown';
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Home',
             style: TextStyle(color: Colors.white),
           ),
@@ -21,28 +39,33 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: const Text(
-                    'Welcome Back Cavidan',
-                    style: TextStyle(
+                  child: Text(
+                    'Welcome Back ${getUsername()}',
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        print('Container clicked');
+                      onTap: () async {
+                        // final SharedPreferences prefs = await SharedPreferences.getInstance();
+                        // print('Container clicked ${prefs.getString('x-auth-token')}');
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return const AddNewProductView();
+                        }));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.4,
@@ -64,7 +87,7 @@ class HomePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             const Text(
-                              'Add Material',
+                              'Add Product',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -87,7 +110,7 @@ class HomePage extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 3,
                             blurRadius: 7,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
@@ -109,7 +132,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -126,7 +149,7 @@ class HomePage extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 3,
                             blurRadius: 7,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
