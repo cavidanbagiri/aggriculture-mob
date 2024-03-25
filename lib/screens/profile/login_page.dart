@@ -24,7 +24,10 @@ class LoginPage extends ConsumerWidget {
           child: Center(
             child: Column(
               children: [
-                const Text('Login', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                const Text(
+                  'Login',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -56,41 +59,49 @@ class LoginPage extends ConsumerWidget {
                   height: 20,
                 ),
                 Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Login', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .primaryColor
-                                .withAlpha(200), // Background color
-                            shape: BoxShape
-                                .circle, // Shape of the container (optional)
-                          ),
-                          child: IconButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                              UserModel user = await AuthService.loginUser(
-                                  email: emailController.text,
-                                  username: usernameController.text,
-                                  password: passwordController.text,
-                                  context: context);
-                              ref
-                                  .read(userProvider.notifier)
-                                  .updateUser(user.id, user.username, user.email);
-                              
-                              ref.read(pageProvider.notifier).state = 0;
-                            }
-                            },
-                            color: Colors.white,
-                            iconSize: 36,
-                            icon: const Icon(Icons.arrow_right_alt_rounded),
-                          ),
-                        ),
-                      ],
-                    )
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Login',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .primaryColor
+                            .withAlpha(200), // Background color
+                        shape: BoxShape
+                            .circle, // Shape of the container (optional)
+                      ),
+                      child: IconButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            UserModel user = await AuthService.loginUser(
+                                email: emailController.text,
+                                username: usernameController.text,
+                                password: passwordController.text,
+                                context: context);
+                            ref
+                                .read(userProvider.notifier)
+                                .updateUser(user.id, user.username, user.email);
+
+                            ref.read(pageProvider.notifier).state = 0;
+                          }
+                        },
+                        color: Colors.white,
+                        iconSize: 36,
+                        icon: const Icon(Icons.arrow_right_alt_rounded),
+                      ),
+                    ),
+                  ],
+                ),
+                ElevatedButton(onPressed: () {
+                  print('Refresh Token Clicked');
+                  AuthService.refreshToken();
+                }, child: Text('Refresh')),
               ],
             ),
           ),

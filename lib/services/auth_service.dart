@@ -38,6 +38,8 @@ class AuthService {
         UserModel.fromJson(jsonEncode(jsonDecode(response.body)['user']));
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('x-auth-token', jsonDecode(response.body)['access_token']);
+    prefs.setString(
+        'refresh-token', jsonDecode(response.body)['refresh_token']);
     return user;
   }
 
@@ -56,8 +58,8 @@ class AuthService {
     http.Response response = await http.post(Uri.parse('$uri'),
         body: json_data,
         headers: {'Content-Type': 'application/json; charset=UTF-8'});
-        print('-->>');
-        print(response.body);
+    print('-->>');
+    print(response.body);
     if (response.statusCode == 200) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -75,7 +77,25 @@ class AuthService {
         UserModel.fromJson(jsonEncode(jsonDecode(response.body)['user']));
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('x-auth-token', jsonDecode(response.body)['access_token']);
+    prefs.setString('refresh-token', jsonDecode(response.body)['refresh_token']);
     return user;
   }
 
+  static refreshToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? refreshToken = prefs.getString('refresh-token');
+    print('refresh token is : $refreshToken');
+    var uri = '$api/user/refresh';
+    if (refreshToken != null) {
+      http.Response response = await http.get(Uri.parse(uri), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'refreshToken': refreshToken
+      });
+      prefs.setString('x-auth-token', jsonDecode(response.body)['access_token']);
+      prefs.setString('refresh-token', jsonDecode(response.body)['refresh_token']);
+    }
+    else{
+      print('There Is Not Refresh Token, User Not Login');
+    }
+  }
 }

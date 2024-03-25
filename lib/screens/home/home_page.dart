@@ -20,8 +20,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     Future<String> getUsername() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      print('--');
-      print(prefs.getString('x-auth-token'));
+      print('access token ${prefs.getString('x-auth-token')}'); 
       return prefs.getString('x-auth-token') ?? 'unknown';
     }
 
@@ -60,8 +59,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // final SharedPreferences prefs = await SharedPreferences.getInstance();
-                        // print('Container clicked ${prefs.getString('x-auth-token')}');
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return const AddNewProductView();
@@ -70,6 +67,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: MediaQuery.of(context).size.width * 0.4,
+                        padding: EdgeInsets.all(2),
                         decoration: BoxDecoration(
                           color: Colors.white70,
                           borderRadius: BorderRadius.circular(6.0),
@@ -85,15 +83,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                         child: Center(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
-                              'Add Product',
+                              textAlign: TextAlign.center,
+                              'Sell Fruits and Vegetables',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Image.network(
                               'https://cdn-icons-png.freepik.com/512/2909/2909894.png',
-                              width: MediaQuery.of(context).size.width * 0.3,
+                              width: MediaQuery.of(context).size.width * 0.2,
                             ),
                           ],
                         )),
@@ -102,6 +102,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: MediaQuery.of(context).size.width * 0.4,
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.white70,
                         borderRadius: BorderRadius.circular(6.0),
@@ -119,13 +120,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           const Text(
-                            'Add Material',
+                            textAlign: TextAlign.center,
+                            'Buy Fruit and Vegetables',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Image.network(
-                            'https://cdn-icons-png.freepik.com/512/2909/2909894.png',
-                            width: MediaQuery.of(context).size.width * 0.3,
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWuM_5Y9Uy7gXZSh-OkElaY4smyAufW3aZ3A&usqp=CAU',
+                            width: MediaQuery.of(context).size.width * 0.2,
                           ),
                         ],
                       )),
