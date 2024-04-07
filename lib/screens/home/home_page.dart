@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:client_mob/main.dart';
 import 'package:client_mob/models/categories_model.dart';
-import 'package:client_mob/models/fruveg_model.dart';
-import 'package:client_mob/screens/home/widgets/fruitsorvegetables_view.dart';
-import 'package:client_mob/screens/home/widgets/product_view.dart';
+import 'package:client_mob/screens/home/views/fruitsorvegetables_view.dart';
+import 'package:client_mob/screens/home/views/product_view.dart';
 import 'package:client_mob/screens/home/widgets/category_container.dart';
-import 'package:client_mob/screens/home/widgets/product_view.dart';
+import 'package:client_mob/screens/home/views/product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,8 +20,10 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
+    
     final user = ref.watch(userProvider);
     final AsyncValue<List<CategoriesModel>> categories = ref.watch(categoriesProvider);
+    
     // final AsyncValue<List<FruVegModel>> fruveg =
     //     ref.watch(fruvegProvider(context));
     const categoryWidgets = [

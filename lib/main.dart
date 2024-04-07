@@ -1,9 +1,11 @@
 import 'package:client_mob/models/categories_model.dart';
-import 'package:client_mob/models/fruveg_model.dart';
+import 'package:client_mob/models/countries_model.dart';
+import 'package:client_mob/models/product_model.dart';
 import 'package:client_mob/models/user_model.dart';
 import 'package:client_mob/providers/user_notifier.dart';
 import 'package:client_mob/services/categories_service.dart';
-import 'package:client_mob/services/fruveg_service.dart';
+import 'package:client_mob/services/country_service.dart';
+import 'package:client_mob/services/list_service.dart';
 import 'package:client_mob/widgets/custom_buttom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,25 +18,25 @@ final userProvider = StateNotifierProvider<UserNotifier, UserModel>((ref) {
   return UserNotifier();
 });
 
-// Show All Fruits and Vegetables For Creating Selling
-final fruvegProvider = FutureProvider.family<List<FruVegModel>, BuildContext>(
-    (ref, context) async {
-  return FruVegService.fetchFruVeg(context: context);
-});
-final fruvegvalueProvider = StateProvider((ref) => 1);
-
-
 // Fetch All Categories and Show in Home Page For Creating a new thing
 final categoriesProvider = FutureProvider<List<CategoriesModel>>((ref) {
-  print('categories fetch already work');
   return CategoriesService.fetchCategories();
-  // return CategoriesModel(id: 0, category_name: 'Unknown');
 });
 
+// Fetch All Products 
+final productsProvider = FutureProvider<List<ProductModel>>((ref){
+  return ListService.fetchProducts();
+});
+
+final countriesProvider = FutureProvider<List<CountriesModel>>((ref) {
+  //print('>> ${CountryService.fetchAllCountries()}');
+  return CountryService.fetchAllCountries();
+});
 
 // Create New Category, choose unit
 final unitProvider = StateProvider<String>((ref) => 'Kg');
-
+final priceProvider = StateProvider<String>((ref) => 'Rub');
+final countryValueProvider = StateProvider<int>((ref) => 1);
 
 
 void main() {

@@ -1,5 +1,6 @@
 import 'package:client_mob/main.dart';
 import 'package:client_mob/screens/home/home_page.dart';
+import 'package:client_mob/screens/list/list_page.dart';
 import 'package:client_mob/screens/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     final page = ref.watch(pageProvider);
     final screens = [
       HomePage(),
-      HomePage(),
+      ListPage(),
+      ListPage(),
       ProfilePage()
     ];
     return Scaffold(
@@ -23,6 +25,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         items: [
           SalomonBottomBarItem(icon: const Icon(Icons.home),  title: const Text('Home'), selectedColor:Colors.purple),
           SalomonBottomBarItem(icon: const Icon(Icons.list), title: const Text('List'), selectedColor:Colors.pink),
+          SalomonBottomBarItem(icon: const Icon(Icons.favorite), title: const Text('Cards'), selectedColor:Colors.teal),
           SalomonBottomBarItem(icon: const Icon(Icons.person), title: const Text('Profile'), selectedColor:Colors.orange),
         ],
         onTap: (value) {

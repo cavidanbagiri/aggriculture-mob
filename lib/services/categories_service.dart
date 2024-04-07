@@ -12,9 +12,9 @@ class CategoriesService {
     print('fetch categories is working');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = '';
-    var some = prefs.getString('x-auth-token');
-    if (some != null) {
-      token = some;
+    var stored_token = prefs.getString('x-auth-token');
+    if (stored_token != null) {
+      token = stored_token;
     } else {
       print('token is not available');
     }
@@ -31,8 +31,6 @@ class CategoriesService {
         CategoriesModel fvm = CategoriesModel(id: i['id'], category_name: i['category_name']);
         cm_list.add(fvm);
       }
-      print('sm list -> ');
-      print(cm_list);
       return cm_list;
     }
     else{

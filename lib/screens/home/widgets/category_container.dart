@@ -1,4 +1,4 @@
-import 'package:client_mob/screens/home/widgets/product_view.dart';
+import 'package:client_mob/screens/home/views/product_view.dart';
 import 'package:flutter/material.dart';
 
 class CategoryContainer extends StatelessWidget {

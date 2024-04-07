@@ -58,8 +58,6 @@ class AuthService {
     http.Response response = await http.post(Uri.parse('$uri'),
         body: json_data,
         headers: {'Content-Type': 'application/json; charset=UTF-8'});
-    print('-->>');
-    print(response.body);
     if (response.statusCode == 200) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -84,7 +82,6 @@ class AuthService {
   static refreshToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? refreshToken = prefs.getString('refresh-token');
-    print('refresh token is : $refreshToken');
     var uri = '$api/user/refresh';
     if (refreshToken != null) {
       http.Response response = await http.get(Uri.parse(uri), headers: {
