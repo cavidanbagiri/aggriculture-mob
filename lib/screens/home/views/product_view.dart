@@ -1,9 +1,13 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:client_mob/main.dart';
 import 'package:client_mob/models/countries_model.dart';
 import 'package:client_mob/screens/home/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:client_mob/services/product_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductView extends ConsumerStatefulWidget {
   const ProductView({super.key});
@@ -17,12 +21,32 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
   final TextEditingController amount_controller = TextEditingController();
   final TextEditingController price_controller = TextEditingController();
   final TextEditingController comment_controller = TextEditingController();
-
-
+  File? selected_file;
+  // This is always will be 1, because it comes from first category
   static const categoryId = 1;
+
+  // pickImage(ImageSource source) async {
+  //   final ImagePicker _imagePicker = ImagePicker();
+  //   var file = await _imagePicker.pickImage(source: source);
+  //   if (file != null) {
+  //     File? selected_file = File(file.path);
+  //     ProductService.uploadImage(selected_file);
+  //   }
+  // }
+  pickImage(ImageSource source) async {
+    final ImagePicker _imagePicker = ImagePicker();
+    var file = await _imagePicker.pickImage(source: source);
+    if (file != null) {
+      selected_file = File(file.path);
+      // ProductService.uploadImage(selected_file);
+      //return selected_file;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<CountriesModel>> countries = ref.watch(countriesProvider);
+    final AsyncValue<List<CountriesModel>> countries =
+        ref.watch(countriesProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New product'),
@@ -36,21 +60,27 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                 const Center(
                   child: Text('Add Product'),
                 ),
+                ElevatedButton(
+                    onPressed: () async {
+                      await pickImage(ImageSource.gallery);
+                    },
+                    child: Text('Select Image')),
                 Center(
                   child: countries.when(
                     data: (data) {
-                      // return Column(
-                      //   children: data.map((e){
-                      //     return Text(e.country_name);
-                      //   }).toList(),
-                      // );
                       return DropdownButton(
                         value: ref.watch(countryValueProvider),
-                        items: data.map((e) =>
-                          DropdownMenuItem(child: Text(e.country_name),value: e.id,)).toList(),
+                        items: data
+                            .map((e) => DropdownMenuItem(
+                                  child: Text(e.country_name),
+                                  value: e.id,
+                                ))
+                            .toList(),
                         onChanged: (value) {
+                          // int some = int.parse(value!);
                           // print('value is $value');
-                          ref.read(countryValueProvider.notifier).state = value!;
+                          ref.read(countryValueProvider.notifier).state =
+                              value!;
                         },
                       );
                     },
@@ -73,27 +103,6 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                       entering_controller: amount_controller,
                       label_text: 'Amount',
                     ),
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width * 0.4,
-                    //   child: TextField(
-                    //     controller: num_controller,
-                    //     decoration: InputDecoration(
-                    //       labelText: 'Nums',
-                    //       // prefixIcon: Icon(Icons.numbers),
-                    //       filled: true,
-                    //       fillColor: Color.fromARGB(255, 248, 247, 247),
-                    //       focusedBorder: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //         borderSide: const BorderSide(color: Colors.purple),
-                    //       ),
-                    //       enabledBorder: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //         borderSide: const BorderSide(
-                    //             color: Color.fromARGB(255, 230, 226, 226)),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: DropdownButton(
@@ -179,7 +188,13 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                       "categoryId": categoryId,
                       "countryId": ref.watch(countryValueProvider),
                     };
-                    ProductService.addProduct(context, data);
+                    // ProductService.addProduct(context, data);
+                    if(selected_file == null){
+                    }
+                    else{
+                      // ProductService.uploadImage(selected_file!, data);
+                    ProductService.addProduct(context, data, selected_file!);
+                    }
                   },
                   child: Text('Post'),
                 )

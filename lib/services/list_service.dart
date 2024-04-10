@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ListService {
   // Fetch All products
   static Future<List<ProductModel>> fetchProducts() async {
-    print('fetch products is working');
     final prefs = await SharedPreferences.getInstance();
     String token = '';
     var stored_token = prefs.getString('x-auth-token');
