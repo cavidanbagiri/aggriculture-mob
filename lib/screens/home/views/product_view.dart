@@ -9,6 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:client_mob/services/product_service.dart';
 import 'package:image_picker/image_picker.dart';
 
+// Create an empty text image section provider, after selecting image, this text will change
+final imageNameProvider = StateProvider<String?>((ref) {
+  return null;
+});
+
 class ProductView extends ConsumerStatefulWidget {
   const ProductView({super.key});
 
@@ -25,21 +30,15 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
   // This is always will be 1, because it comes from first category
   static const categoryId = 1;
 
-  // pickImage(ImageSource source) async {
-  //   final ImagePicker _imagePicker = ImagePicker();
-  //   var file = await _imagePicker.pickImage(source: source);
-  //   if (file != null) {
-  //     File? selected_file = File(file.path);
-  //     ProductService.uploadImage(selected_file);
-  //   }
-  // }
-  pickImage(ImageSource source) async {
+  Future pickImage(ImageSource source) async {
     final ImagePicker _imagePicker = ImagePicker();
     var file = await _imagePicker.pickImage(source: source);
     if (file != null) {
+      //print('1 - ${ref.watch(imageNameProvider)}');
       selected_file = File(file.path);
-      // ProductService.uploadImage(selected_file);
-      //return selected_file;
+      //print('selected file $selected_file');
+      ref.read(imageNameProvider.notifier).state = 'One File Selected';
+      //print('2 - ${ref.watch(imageNameProvider)}');
     }
   }
 
@@ -61,10 +60,16 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                   child: Text('Add Product'),
                 ),
                 ElevatedButton(
-                    onPressed: () async {
-                      await pickImage(ImageSource.gallery);
-                    },
-                    child: Text('Select Image')),
+                  onPressed: () async {
+                    await pickImage(ImageSource.gallery);
+                  },
+                  child: const Text('Select Image'),
+                ),
+                Center(
+                  child: ref.watch(imageNameProvider) == null
+                      ? null
+                      : Text('${ref.watch(imageNameProvider)}'),
+                ),
                 Center(
                   child: countries.when(
                     data: (data) {
@@ -177,7 +182,7 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                   height: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     final Map<String, dynamic> data = {
                       "product_name": product_name_controller.text,
                       "amount": amount_controller.text,
@@ -189,11 +194,29 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                       "countryId": ref.watch(countryValueProvider),
                     };
                     // ProductService.addProduct(context, data);
-                    if(selected_file == null){
-                    }
-                    else{
-                      // ProductService.uploadImage(selected_file!, data);
-                    ProductService.addProduct(context, data, selected_file!);
+                    if (selected_file == null) {
+                      final bool result =
+                          await ProductService.addProduct(context, data);
+                      if (result) {
+                        product_name_controller.text = '';
+                        amount_controller.text = '';
+                        comment_controller.text = '';
+                        price_controller.text = '';
+                        selected_file = null;
+                        ref.read(imageNameProvider.notifier).state = null;
+                      }
+                    } else {
+                      final bool result =
+                          await ProductService.addProductWithImage(
+                              context, data, selected_file!);
+                      if (result) {
+                        product_name_controller.text = '';
+                        amount_controller.text = '';
+                        comment_controller.text = '';
+                        price_controller.text = '';
+                        selected_file = null;
+                        ref.read(imageNameProvider.notifier).state = null;
+                      }
                     }
                   },
                   child: Text('Post'),

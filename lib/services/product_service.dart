@@ -2,80 +2,51 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:client_mob/constants/api.dart';
+import 'package:client_mob/services/token_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductService {
+
   // Add product to database
-  // static addProduct(context, Map<String, dynamic> data) async {
-  //   var uri = '$api/product/create';
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String token = '';
-  //   var some = prefs.getString('x-auth-token');
-  //   if (some != null) {
-  //     token = some;
-  //   } else {
-  //     print('token is not available');
-  //   }
-  //   final json_data = jsonEncode(data);
+  static Future<bool> addProduct(context, Map<String, dynamic> data) async {
+    var uri = '$api/product/create';
+    final String token = await TokenService.getToken();
+    final json_data = jsonEncode(data);
 
-  //   final http.Response response = await http.post(
-  //     Uri.parse(uri),
-  //     body: json_data,
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'authorization': 'Bearear $token'
-  //     },
-  //   );
-  //   if (response.statusCode == 201) {
-  //     if (context.mounted) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('New product Successfully Added')),
-  //       );
-  //     }
-  //   } else {
-  //     if (context.mounted) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text(jsonDecode(response.body)['msg'])),
-  //       );
-  //     }
-  //   }
-  // }
+    final http.Response response = await http.post(
+      Uri.parse(uri),
+      body: json_data,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': 'Bearear $token'
+      },
+    );
+    if (response.statusCode == 201) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('New product Successfully Added')),
+        );
+        return true;
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(jsonDecode(response.body)['msg'])),
+        );
+        return false;
+      }
+    }
+    return false;
+  }
 
-  // static Future<void> uploadImage(File imageFile) async {
-  //   final uri = '$api/product/uploadimage';
-  //   var request = http.MultipartRequest(
-  //     'POST',
-  //     Uri.parse(uri),
-  //   );
-
-  //   var pic = await http.MultipartFile.fromPath('image', imageFile.path);
-  //   request.files.add(pic);
-
-  //   var response = await request.send();
-
-  //   if (response.statusCode == 201) {
-  //     print('Image uploaded successfully');
-  //   } else {
-  //     print('Failed to upload image. Error code: ${response.statusCode}');
-  //   }
-  // }
-
-  static addProduct(context, Map<String, dynamic> data, File imageFile) async {
+  static Future<bool> addProductWithImage(context, Map<String, dynamic> data, File imageFile) async {
 
     // Create Sending Image URL
     var uri = '$api/product/create';
 
-    // Take Token from shared preferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = '';
-    var some = prefs.getString('x-auth-token');
-    if (some != null) {
-      token = some;
-    } else {
-      print('token is not available');
-    }
+    final String token = await TokenService.getToken();
 
     // Create Request
     var request = http.MultipartRequest(
@@ -97,7 +68,6 @@ class ProductService {
     request.headers.addAll(headers);
 
     // Get data from frontend and convert to json
-    // final json_data = jsonEncode(data);
     request.fields['product_name'] = data['product_name'];
     request.fields['amount'] = data['amount'];
     request.fields['unit'] = data['unit'];
@@ -112,40 +82,21 @@ class ProductService {
     var response = await request.send();
 
     if (response.statusCode == 201) {
-      print('Image uploaded successfully');
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('New product Successfully Added')),
+        );
+      return true;
     } else {
-      print('Failed to upload image. Error code: ${response.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image Can\'t Added')),
+        );
+      return false;
     }
   }
 
 
-    // final json_data = jsonEncode(data);
-
-    // final http.Response response = await http.post(
-    //   Uri.parse(uri),
-    //   body: json_data,
-    //   headers: {
-    //     'Content-Type': 'application/json; charset=UTF-8',
-    //     'authorization': 'Bearear $token'
-    //   },
-    // );
-    // if (response.statusCode == 201) {
-    //   if (context.mounted) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text('New product Successfully Added')),
-    //     );
-    //   }
-    // } else {
-    //   if (context.mounted) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text(jsonDecode(response.body)['msg'])),
-    //     );
-    //   }
-    // }
-  
-
-
-  static Future<void> uploadImage(File imageFile, Map<String, dynamic> data) async {
+  // This will used for update foto for existing product
+  static Future<bool> uploadImage(File imageFile, Map<String, dynamic> data) async {
     
     // Create a uri for sending request to backend
     // final uri = '$api/product/uploadimage';
@@ -181,7 +132,6 @@ class ProductService {
     request.headers.addAll(headers);
 
     // Get data from frontend and convert to json
-    // final json_data = jsonEncode(data);
     request.fields['product_name'] = data['product_name'];
     request.fields['amount'] = data['amount'];
     request.fields['unit'] = data['unit'];
@@ -196,9 +146,11 @@ class ProductService {
     var response = await request.send();
 
     if (response.statusCode == 201) {
-      print('Image uploaded successfully');
+      print('New Product Successfully Added');
+      return true;
     } else {
       print('Failed to upload image. Error code: ${response.statusCode}');
+      return false;
     }
   }
 

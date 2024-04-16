@@ -1,7 +1,7 @@
 import 'package:client_mob/main.dart';
 import 'package:client_mob/models/user_model.dart';
 import 'package:client_mob/services/auth_service.dart';
-import 'package:client_mob/widgets/custom_text_form_field.dart';
+import 'package:client_mob/screens/profile/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -99,9 +99,8 @@ class LoginPage extends ConsumerWidget {
                   ],
                 ),
                 ElevatedButton(onPressed: () {
-                  print('Refresh Token Clicked');
                   AuthService.refreshToken();
-                }, child: Text('Refresh')),
+                }, child: const Text('Refresh')),
               ],
             ),
           ),
