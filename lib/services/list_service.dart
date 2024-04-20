@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:client_mob/constants/api.dart';
 import 'package:client_mob/models/product_model.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +24,7 @@ class ListService {
     List<ProductModel> pm_list = [];
     if (products.statusCode == 200) {
       for (final each in jsonDecode(products.body)) {
+        print((each));
         final ProductModel pm = ProductModel(
             id: each['id'],
             product_name: each['product_name'],
@@ -36,12 +35,15 @@ class ListService {
             comment: each['comment'],
             status: each['status'],
             categoryId: each['categoryId'],
+            category_name: each['CategoryModel']['category_name'],
+            country_name: each['CountryModel']['country_name'],
             userId: each['userId']);
         pm_list.add(pm);
       }
     } else {
       print(products);
     }
+    print(pm_list);
     return pm_list;
   }
 }

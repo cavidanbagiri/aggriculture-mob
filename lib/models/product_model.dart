@@ -14,6 +14,8 @@ class ProductModel {
   final String comment;
   final bool status;
   final int categoryId;
+  final String category_name;
+  final String country_name;
   final int userId;
   ProductModel({
     required this.id,
@@ -25,6 +27,8 @@ class ProductModel {
     required this.comment,
     required this.status,
     required this.categoryId,
+    required this.category_name,
+    required this.country_name,
     required this.userId,
   });
 
@@ -42,6 +46,8 @@ class ProductModel {
       'comment': comment,
       'status': status,
       'categoryId': categoryId,
+      'category_name': category_name,
+      'country_name': country_name,
       'userId': userId,
     };
   }
@@ -57,6 +63,8 @@ class ProductModel {
       comment: map['comment'] as String,
       status: map['status'] as bool,
       categoryId: map['categoryId'] as int,
+      category_name: map['category_name'] as String,
+      country_name: map['country_name'] as String,
       userId: map['userId'] as int,
     );
   }
@@ -67,6 +75,6 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(id: $id, product_name: $product_name, amount: $amount, unit: $unit, price: $price, currency: $currency, comment: $comment, status: $status, categoryId: $categoryId, userId: $userId)';
+    return 'ProductModel(id: $id, product_name: $product_name, amount: $amount, unit: $unit, price: $price, currency: $currency, comment: $comment, status: $status, categoryId: $categoryId, category_name: $category_name, country_name: $country_name, userId: $userId)';
   }
 }

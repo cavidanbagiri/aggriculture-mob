@@ -1,6 +1,7 @@
 import 'package:client_mob/main.dart';
 import 'package:client_mob/models/countries_model.dart';
 import 'package:client_mob/models/product_model.dart';
+import 'package:client_mob/screens/list/widgets/product__container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,26 +21,29 @@ class _ListPageState extends ConsumerState<ListPage> {
       appBar: AppBar(
         title: Text('List'),
       ),
-      body: Column(
-        children: [
-          Center(
-            child: products.when(
-              data: (data) {
-                return Column(
-                  children: data.map((e){
-                    return Text(e.product_name);
-                  }).toList(),
-                );
-              },
-              error: (error, stackTrace) {
-                return Text(stackTrace.toString());
-              },
-              loading: () {
-                return const CircularProgressIndicator();
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Center(
+              child: products.when(
+                data: (data) {
+                  return Column(
+                    children: data.map((e){
+                      // return Text(e.product_name);
+                      return ProductContainer(pm: e);
+                    }).toList(),
+                  );
+                },
+                error: (error, stackTrace) {
+                  return Text(stackTrace.toString());
+                },
+                loading: () {
+                  return const CircularProgressIndicator();
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

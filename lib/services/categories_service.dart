@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:client_mob/constants/api.dart';
 import 'package:client_mob/models/categories_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoriesService {
   // Fetch All Categories
   static Future<List<CategoriesModel>> fetchCategories() async {
-    print('fetch categories is working');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = '';
     var stored_token = prefs.getString('x-auth-token');
