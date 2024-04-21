@@ -1,5 +1,4 @@
 import 'package:client_mob/main.dart';
-import 'package:client_mob/models/countries_model.dart';
 import 'package:client_mob/models/product_model.dart';
 import 'package:client_mob/screens/list/widgets/product__container.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class _ListPageState extends ConsumerState<ListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('List'),
+        title: const Text('List'),
       ),
       body: SingleChildScrollView(
         child: Column(

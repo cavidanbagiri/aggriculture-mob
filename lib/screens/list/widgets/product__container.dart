@@ -1,6 +1,7 @@
 
 
 import 'package:client_mob/models/product_model.dart';
+import 'package:client_mob/services/card_sevice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,19 +14,24 @@ class ProductContainer extends ConsumerWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            print('clicked : ${pm.id}');
+          onTap: () async{
+            final data = {
+              "userId": pm.userId,
+              "categoryId": pm.categoryId,
+              "selectedId": pm.id
+            };
+            CardService.addCard(context, data);
           },
           child: Container(
             width: MediaQuery.of(context).size.width*0.8,
             height: MediaQuery.of(context).size.width*0.3,
-            margin: EdgeInsets.only(top: 5),
+            margin: const EdgeInsets.only(top: 5),
             color: Colors.blue,
             child: Text(pm.product_name),
           ),
         ),
         IconButton(onPressed: (){
-        }, icon: Icon(Icons.heart_broken)),
+        }, icon: const Icon(Icons.heart_broken)),
       ],
     );
   }

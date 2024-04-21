@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
+
   static Future<UserModel> registerUser(
       {required String email,
       required String username,
