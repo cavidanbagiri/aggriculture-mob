@@ -1,5 +1,6 @@
 import 'package:client_mob/models/categories_model.dart';
 import 'package:client_mob/models/countries_model.dart';
+import 'package:client_mob/models/item_model.dart';
 import 'package:client_mob/models/product_model.dart';
 import 'package:client_mob/models/user_model.dart';
 import 'package:client_mob/providers/user_notifier.dart';
@@ -24,8 +25,8 @@ final categoriesProvider = FutureProvider<List<CategoriesModel>>((ref) {
 });
 
 // Fetch All Products 
-final productsProvider = FutureProvider<List<ProductModel>>((ref){
-  return ListService.fetchProducts();
+final itemsProvider = FutureProvider<List<ItemModel>>((ref){
+  return ListService.fetchItems();
 });
 
 final countriesProvider = FutureProvider<List<CountriesModel>>((ref) {
@@ -36,7 +37,10 @@ final countriesProvider = FutureProvider<List<CountriesModel>>((ref) {
 // Create New Category, choose unit
 final unitProvider = StateProvider<String>((ref) => 'Kg');
 final priceProvider = StateProvider<String>((ref) => 'Rub');
-final countryValueProvider = StateProvider<int>((ref) => 1);
+final countryValueProvider = StateProvider<int>((ref) => 973);
+
+// Fetch All Cards
+
 
 
 void main() {

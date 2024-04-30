@@ -1,6 +1,7 @@
 import 'package:client_mob/main.dart';
 import 'package:client_mob/screens/home/home_page.dart';
 import 'package:client_mob/screens/list/list_page.dart';
+import 'package:client_mob/screens/card/card_page.dart';
 import 'package:client_mob/screens/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,10 +13,10 @@ class CustomBottomNavigationBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final page = ref.watch(pageProvider);
-    final screens = [
+    const screens = [
       HomePage(),
       ListPage(),
-      ListPage(),
+      CardPage(),
       ProfilePage()
     ];
     return Scaffold(

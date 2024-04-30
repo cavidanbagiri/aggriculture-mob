@@ -56,9 +56,6 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const Center(
-                  child: Text('Add Product'),
-                ),
                 ElevatedButton(
                   onPressed: () async {
                     await pickImage(ImageSource.gallery);
@@ -184,7 +181,7 @@ class _AddNewProductViewState extends ConsumerState<ProductView> {
                 ElevatedButton(
                   onPressed: () async {
                     final Map<String, dynamic> data = {
-                      "product_name": product_name_controller.text,
+                      "name": product_name_controller.text,
                       "amount": amount_controller.text,
                       "unit": ref.watch(unitProvider),
                       "price": price_controller.text,

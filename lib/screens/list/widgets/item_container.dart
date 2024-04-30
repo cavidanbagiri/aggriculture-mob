@@ -1,13 +1,14 @@
 
 
-import 'package:client_mob/models/product_model.dart';
+import 'package:client_mob/models/item_model.dart';
+// import 'package:client_mob/models/product_model.dart';
 import 'package:client_mob/services/card_sevice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductContainer extends ConsumerWidget {
-  final ProductModel pm;
-  const ProductContainer({super.key, required this.pm});
+class ItemContainer extends ConsumerWidget {
+  final ItemModel im;
+  const ItemContainer({super.key, required this.im});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,9 +17,8 @@ class ProductContainer extends ConsumerWidget {
         GestureDetector(
           onTap: () async{
             final data = {
-              "userId": pm.userId,
-              "categoryId": pm.categoryId,
-              "selectedId": pm.id
+              "userId": im.userId,
+              "itemsId": im.id,
             };
             CardService.addCard(context, data);
           },
@@ -27,7 +27,22 @@ class ProductContainer extends ConsumerWidget {
             height: MediaQuery.of(context).size.width*0.3,
             margin: const EdgeInsets.only(top: 5),
             color: Colors.blue,
-            child: Text(pm.product_name),
+            child: Column(
+              children: [
+                Container(
+                  child: Text(im.name),
+                ),
+                Container(
+                  child: Text(im.user_name),
+                ),
+                Container(
+                  child: Text(im.category_name),
+                ),
+                Container(
+                  child: Text(im.price.toString()),
+                ),
+              ],
+            ),
           ),
         ),
         IconButton(onPressed: (){

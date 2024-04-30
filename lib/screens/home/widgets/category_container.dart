@@ -1,51 +1,64 @@
-import 'package:client_mob/screens/home/views/product_view.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class CategoryContainer extends StatelessWidget {
-
-  final String containerName;  
+class CategoryContainer extends ConsumerWidget {
+  final int id;
   final Widget categoryWidgetView;
-  
-  const CategoryContainer({super.key, required this.containerName, required this.categoryWidgetView});
-  
+  final String category;
+  final IconData? image_name;
+  final Color? background_color;
+  final Color? icon_color;
+  const CategoryContainer({super.key,
+    required this.id,
+    required this.categoryWidgetView,
+    required this.category,
+    required this.image_name,
+    required this.background_color,
+    required this.icon_color});
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InkWell(
+      onTap: (){
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return categoryWidgetView;
         }));
       },
       child: Container(
-        width: MediaQuery.of(context).size.width ,
-        height: MediaQuery.of(context).size.width * 0.2,
-        padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          color: Colors.white70,
-          borderRadius: BorderRadius.circular(6.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
+          padding: const EdgeInsets.all(2),
+          margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+          decoration: BoxDecoration(
+            color: background_color,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.20,
+                height: MediaQuery.of(context).size.width * 0.13,
+                child: Icon(
+                  image_name,
+                  color: icon_color,
+                  size: MediaQuery.of(context).size.width * 0.13,
+                ),
+              ),
+              Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.18,
+                  height: MediaQuery.of(context).size.width * 0.10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Text(category, textAlign: TextAlign.center,style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w500),),
+                ),
+              )
+            ],
+          ),
         ),
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              textAlign: TextAlign.center,
-              containerName,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ],
-        )),
-      ),
     );
   }
 }

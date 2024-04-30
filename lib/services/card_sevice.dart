@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 class CardService {
 
+
     // Add Selected Item To Card
     static addCard(context, Map<String, dynamic> data) async{
 
@@ -36,6 +37,10 @@ class CardService {
           const SnackBar(content: Text('Cant Add To Card'))
         );
       }
+    }
+
+    // Show Cards
+    static showCards() async {
 
     }
 
